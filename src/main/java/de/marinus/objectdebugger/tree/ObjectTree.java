@@ -3,7 +3,10 @@ package de.marinus.objectdebugger.tree;
 
 import de.marinus.objectdebugger.util.ObjectUtil;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class ObjectTree {
 
@@ -83,22 +86,27 @@ public class ObjectTree {
 
 
     public String print() {
-        return printNode(root, 0);
+        return printNode(root, 0, new HashSet<>());
     }
 
     public String print(int depth) {
-        return printNode(root, depth);
+        return printNode(root, depth, new HashSet<>());
     }
 
-    public String printNode(Node node, int depth) {
+    public String printNode(Node node, int depth, final Set<Object> printedObjects) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             builder.append("  ");
         }
+        printedObjects.add(node.value);
         builder.append(node.value);
         builder.append("\n");
         for (Node child : node.children) {
-            builder.append(printNode(child, depth + 1));
+            if (printedObjects.contains(child.value)) {
+                builder.append("\n").append(child.value).append(" (already printed)\n");
+                continue;
+            }
+            builder.append(printNode(child, depth + 1, printedObjects));
         }
         return builder.toString();
     }
