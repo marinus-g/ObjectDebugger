@@ -69,7 +69,7 @@ public class ObjectTree {
             nodes = getChild(child, depth, currentDepth, nodes);
         }
         return nodes;
-    }
+    }//test
 
     private Node[] getChild(Node node, int depth, int currentDepth, Node[] nodes) {
         if (currentDepth == depth) {
